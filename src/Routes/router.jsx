@@ -5,6 +5,7 @@ import CreateProduct from "../pages/CreateProduct/CreateProduct";
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <CreateProduct></CreateProduct>,
   },
   {
     path: "/create-product",
