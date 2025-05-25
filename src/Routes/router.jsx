@@ -5,11 +5,6 @@ import CreateProduct from "../pages/CreateProduct/CreateProduct";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <React.Suspense fallback={<div>Loading...</div>}>
-        <createProduct />
-      </React.Suspense>
-    ),
   },
   {
     path: "/create-product",
