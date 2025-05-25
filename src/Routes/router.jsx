@@ -1,8 +1,6 @@
 import React from "react";
 import { createBrowserRouter } from "react-router";
-const CreateProduct = React.lazy(() =>
-  import("../pages/CreateProduct/CreateProduct")
-);
+import CreateProduct from "../pages/CreateProduct/CreateProduct";
 
 const router = createBrowserRouter([
   {
