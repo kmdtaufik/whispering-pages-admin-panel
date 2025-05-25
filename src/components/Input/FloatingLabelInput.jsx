@@ -20,16 +20,18 @@ const FloatingLabelInput = ({ children, id, type = "text", ...props }) => {
         onFocus={handleFocus}
         onBlur={handleBlur}
         className={`w-full px-4 pt-6 pb-2 text-base border rounded-xl focus:outline-none
-          ${
-            focused ? "border-blue-500 ring-2 ring-blue-300" : "border-gray-300"
-          }
+          ${focused ? "border-black" : "border-gray-300"}
         `}
         {...props}
       />
       <label
         htmlFor={id}
-        className={`absolute px-1 bg-white left-3 transition-all duration-200 text-gray-500 pointer-events-none
-          ${isFloating ? "text-sm -top-2.5" : "top-1/2 -translate-y-1/2"}
+        className={`absolute px-1 bg-white left-3 transition-all duration-200  pointer-events-none
+          ${
+            isFloating
+              ? "text-sm -top-2.5 text-black"
+              : "top-1/2 -translate-y-1/2 text-gray-500"
+          }
         `}
       >
         {children}

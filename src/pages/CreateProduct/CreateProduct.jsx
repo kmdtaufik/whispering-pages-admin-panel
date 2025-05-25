@@ -2,236 +2,329 @@ import React, { useState } from "react";
 import FloatingLabelInput from "../../components/Input/FloatingLabelInput";
 
 export default function CreateProduct() {
-  const [formData, setFormData] = useState({
-    productName: "",
-    productDescription: "",
-    productPrice: "",
-    discount: "",
-    discountType: "percentage",
-    offerEndsAt: "",
-    stock: "",
-    category: "",
-    subCategory: "",
-    brand: "",
-    seller: "",
-    isReturnable: false,
-    returnDays: "",
-  });
-
-  const [thumbnail, setThumbnail] = useState(null);
-  const [images, setImages] = useState([]);
+  const [form, setForm] = useState({});
 
   const handleChange = (e) => {
-    const { id, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [id]: type === "checkbox" ? checked : value,
-    });
+    const { id, value, type, files } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [id]: type === "file" ? files[0] : value,
+    }));
   };
 
-  const handleThumbnailChange = (e) => {
-    const file = e.target.files[0];
-    if (file) setThumbnail(file);
-  };
-
-  const handleImagesChange = (e) => {
-    const files = Array.from(e.target.files);
-    if (files.length) setImages(files);
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const data = new FormData();
-    Object.entries(formData).forEach(([key, value]) => data.append(key, value));
+    try {
+      const data = new FormData();
 
-    if (thumbnail) data.append("productThumbnail", thumbnail);
-    images.forEach((img) => data.append("productImages", img));
+      // Append primitive and string fields
+      data.append("slug", form.slug);
+      data.append("productName", form.productName);
+      data.append("productNameLocal", form.productNameLocal || "");
+      data.append("productDescription", form.productDescription);
+      data.append(
+        "productDescriptionLocal",
+        form.productDescriptionLocal || ""
+      );
+      data.append("productPrice", form.productPrice);
+      data.append("originalPrice", form.originalPrice || "");
+      data.append("discount", form.discount);
+      data.append("discountType", form.discountType);
+      data.append("offerEndsAt", form.offerEndsAt || "");
+      data.append("category", form.category);
+      data.append("subCategory", form.subCategory);
+      data.append("brand", form.brand);
+      data.append("manufacturer", form.manufacturer);
+      data.append("modelNumber", form.modelNumber);
+      data.append("sku", form.sku);
+      data.append("barcode", form.barcode);
+      data.append("stock", form.stock);
+      data.append("minOrderQuantity", form.minOrderQuantity);
+      data.append("maxOrderQuantity", form.maxOrderQuantity);
+      data.append("seller", form.seller);
+      data.append("addedBy", form.addedBy || "");
+      data.append("isReturnable", form.isReturnable);
+      data.append("returnDays", form.returnDays);
+      data.append("warrantyType", form.warrantyType);
+      data.append("warrantyPeriod", form.warrantyPeriod);
 
-    console.log("Submitting form...");
-    // You can send `data` using fetch or axios
-    // Example:
-    // await axios.post('/api/products', data);
+      // Boolean Flags
+      data.append("isFeatured", form.isFeatured);
+      data.append("isHot", form.isHot);
+      data.append("isNewArrival", form.isNewArrival);
+      data.append("isBestSeller", form.isBestSeller);
+      data.append("isRecommended", form.isRecommended);
+      data.append("isTrending", form.isTrending);
+      data.append("notAvailable", form.notAvailable);
+      data.append("isOutOfStock", form.isOutOfStock);
+
+      // Shipping Info (nested)
+      // data.append("shippingInfo.weight", form.shippingInfo.weight);
+      // data.append("shippingInfo.length", form.shippingInfo.length);
+      // data.append("shippingInfo.width", form.shippingInfo.width);
+      // data.append("shippingInfo.height", form.shippingInfo.height);
+      // data.append("shippingInfo.shippingFrom", form.shippingInfo.shippingFrom);
+      // data.append("shippingInfo.shippingTo", form.shippingInfo.shippingTo);
+      // data.append("shippingInfo.shippingCost", form.shippingInfo.shippingCost);
+
+      // Append tags & metaKeywords (arrays)
+      const tagsArray = Array.isArray(form.tags)
+        ? form.tags
+        : typeof form.tags === "string" && form.tags.length > 0
+        ? form.tags.split(",").map((t) => t.trim())
+        : [];
+      tagsArray.forEach((tag, i) => data.append(`tags[${i}]`, tag));
+
+      const metaKeywordsArray = Array.isArray(form.metaKeywords)
+        ? form.metaKeywords
+        : typeof form.metaKeywords === "string" && form.metaKeywords.length > 0
+        ? form.metaKeywords.split(",").map((kw) => kw.trim())
+        : [];
+      metaKeywordsArray.forEach((kw, i) =>
+        data.append(`metaKeywords[${i}]`, kw)
+      );
+
+      // Append specifications and variants (arrays of objects)
+      data.append("specification", JSON.stringify(form.specification));
+      data.append("variants", JSON.stringify(form.variants));
+      data.append("customFields", JSON.stringify(form.customFields));
+
+      // File inputs
+      if (form.productThumbnail) {
+        data.append("productThumbnail", form.productThumbnail);
+      }
+
+      if (form.productImages && form.productImages.length > 0) {
+        Array.from(form.productImages).forEach((file) => {
+          data.append("productImages", file);
+        });
+      }
+
+      const res = await fetch("http://localhost:5000/api/products", {
+        method: "POST",
+        body: data,
+      });
+
+      if (!res.ok) throw new Error("Failed to submit product");
+
+      const result = await res.json();
+      console.log("Product submitted:", result);
+      alert("Product created successfully!");
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("Something went wrong while creating the product.");
+    }
   };
 
   return (
-    <section>
+    <section className="p-6 max-w-4xl mx-auto">
       <form
         onSubmit={handleSubmit}
-        className="p-6 max-w-2xl mx-auto space-y-6"
-        encType="multipart/form-data"
+        className="grid grid-cols-1 md:grid-cols-2 gap-4"
       >
-        <FloatingLabelInput
-          id="productName"
-          type="text"
-          value={formData.productName}
-          onChange={handleChange}
-        >
+        <FloatingLabelInput id="slug" onChange={handleChange}>
+          Slug
+        </FloatingLabelInput>
+        <FloatingLabelInput id="productName" onChange={handleChange}>
           Product Name
         </FloatingLabelInput>
-
-        <FloatingLabelInput
-          id="productDescription"
-          type="text"
-          value={formData.productDescription}
-          onChange={handleChange}
-        >
+        <FloatingLabelInput id="productNameLocal" onChange={handleChange}>
+          Product Name (Local)
+        </FloatingLabelInput>
+        <FloatingLabelInput id="productDescription" onChange={handleChange}>
           Product Description
         </FloatingLabelInput>
-
+        <FloatingLabelInput
+          id="productDescriptionLocal"
+          onChange={handleChange}
+        >
+          Product Description (Local)
+        </FloatingLabelInput>
         <FloatingLabelInput
           id="productPrice"
           type="number"
-          value={formData.productPrice}
           onChange={handleChange}
         >
-          Price
+          Product Price
         </FloatingLabelInput>
-
         <FloatingLabelInput
-          id="discount"
+          id="originalPrice"
           type="number"
-          value={formData.discount}
           onChange={handleChange}
         >
-          Discount
+          Original Price
         </FloatingLabelInput>
 
-        <div className="mt-6">
-          <label className="block text-sm font-medium mb-1 text-gray-600">
-            Discount Type
-          </label>
-          <select
-            id="discountType"
-            value={formData.discountType}
+        <div>
+          <label className="block mb-1">Product Thumbnail</label>
+          <input
+            id="productThumbnail"
+            type="file"
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="percentage">Percentage</option>
-            <option value="flat">Flat</option>
-          </select>
+            className="w-full rounded-lg bg-gray-400"
+          />
         </div>
 
+        <div>
+          <label className="block mb-1">Product Images</label>
+          <input
+            id="productImages"
+            type="file"
+            multiple
+            onChange={handleChange}
+            className="w-full rounded-lg bg-gray-400"
+          />
+        </div>
+
+        <FloatingLabelInput id="discount" type="number" onChange={handleChange}>
+          Discount
+        </FloatingLabelInput>
+        <select
+          id="discountType"
+          onChange={handleChange}
+          className="border p-2 rounded-xl"
+        >
+          <option value="">Select Discount Type</option>
+          <option value="percentage">Percentage</option>
+          <option value="flat">Flat</option>
+        </select>
         <FloatingLabelInput
           id="offerEndsAt"
           type="datetime-local"
-          value={formData.offerEndsAt}
           onChange={handleChange}
         >
           Offer Ends At
         </FloatingLabelInput>
-
-        <FloatingLabelInput
-          id="stock"
-          type="number"
-          value={formData.stock}
-          onChange={handleChange}
-        >
-          Stock
-        </FloatingLabelInput>
-
-        <FloatingLabelInput
-          id="category"
-          type="text"
-          value={formData.category}
-          onChange={handleChange}
-        >
+        <FloatingLabelInput id="category" onChange={handleChange}>
           Category
         </FloatingLabelInput>
-
-        <FloatingLabelInput
-          id="subCategory"
-          type="text"
-          value={formData.subCategory}
-          onChange={handleChange}
-        >
+        <FloatingLabelInput id="subCategory" onChange={handleChange}>
           Subcategory
         </FloatingLabelInput>
-
-        <FloatingLabelInput
-          id="brand"
-          type="text"
-          value={formData.brand}
-          onChange={handleChange}
-        >
+        <FloatingLabelInput id="brand" onChange={handleChange}>
           Brand
         </FloatingLabelInput>
-
+        <FloatingLabelInput id="manufacturer" onChange={handleChange}>
+          Manufacturer
+        </FloatingLabelInput>
+        <FloatingLabelInput id="modelNumber" onChange={handleChange}>
+          Model Number
+        </FloatingLabelInput>
+        <FloatingLabelInput id="sku" onChange={handleChange}>
+          SKU
+        </FloatingLabelInput>
+        <FloatingLabelInput id="barcode" onChange={handleChange}>
+          Barcode
+        </FloatingLabelInput>
+        <FloatingLabelInput id="stock" type="number" onChange={handleChange}>
+          Stock
+        </FloatingLabelInput>
         <FloatingLabelInput
-          id="seller"
-          type="text"
-          value={formData.seller}
+          id="minOrderQuantity"
+          type="number"
           onChange={handleChange}
         >
+          Min Order Quantity
+        </FloatingLabelInput>
+        <FloatingLabelInput
+          id="maxOrderQuantity"
+          type="number"
+          onChange={handleChange}
+        >
+          Max Order Quantity
+        </FloatingLabelInput>
+        <FloatingLabelInput id="tags" onChange={handleChange}>
+          Tags (comma separated)
+        </FloatingLabelInput>
+        <FloatingLabelInput id="metaTitle" onChange={handleChange}>
+          Meta Title
+        </FloatingLabelInput>
+        <FloatingLabelInput id="metaDescription" onChange={handleChange}>
+          Meta Description
+        </FloatingLabelInput>
+        <FloatingLabelInput id="metaKeywords" onChange={handleChange}>
+          Meta Keywords (comma separated)
+        </FloatingLabelInput>
+        <FloatingLabelInput id="seller" onChange={handleChange}>
           Seller
         </FloatingLabelInput>
+        <FloatingLabelInput id="addedBy" onChange={handleChange}>
+          Added By
+        </FloatingLabelInput>
+        <FloatingLabelInput id="isReturnable" onChange={handleChange}>
+          Returnable (true/false)
+        </FloatingLabelInput>
+        <FloatingLabelInput
+          id="returnDays"
+          type="number"
+          onChange={handleChange}
+        >
+          Return Days
+        </FloatingLabelInput>
+        <select
+          id="warrantyType"
+          onChange={handleChange}
+          className="border p-2 rounded-xl"
+        >
+          <option value="">Select Warranty Type</option>
+          <option value="manufacturer">Manufacturer</option>
+          <option value="seller">Seller</option>
+        </select>
+        <FloatingLabelInput
+          id="warrantyPeriod"
+          type="number"
+          onChange={handleChange}
+        >
+          Warranty Period (Days)
+        </FloatingLabelInput>
 
-        <div className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            id="isReturnable"
-            checked={formData.isReturnable}
-            onChange={handleChange}
-            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-          />
-          <label htmlFor="isReturnable" className="text-sm text-gray-700">
-            Is Returnable?
-          </label>
-        </div>
+        {/* Shipping Info */}
+        {/* <FloatingLabelInput id="weight" type="number" onChange={handleChange}>
+          Weight
+        </FloatingLabelInput> */}
+        <FloatingLabelInput id="length" type="number" onChange={handleChange}>
+          Length
+        </FloatingLabelInput>
+        <FloatingLabelInput id="width" type="number" onChange={handleChange}>
+          Width
+        </FloatingLabelInput>
+        <FloatingLabelInput id="height" type="number" onChange={handleChange}>
+          Height
+        </FloatingLabelInput>
+        <FloatingLabelInput id="shippingFrom" onChange={handleChange}>
+          Shipping From
+        </FloatingLabelInput>
+        <FloatingLabelInput id="shippingTo" onChange={handleChange}>
+          Shipping To
+        </FloatingLabelInput>
+        <FloatingLabelInput
+          id="shippingCost"
+          type="number"
+          onChange={handleChange}
+        >
+          Shipping Cost
+        </FloatingLabelInput>
 
-        {formData.isReturnable && (
-          <FloatingLabelInput
-            id="returnDays"
-            type="number"
-            value={formData.returnDays}
-            onChange={handleChange}
-          >
-            Return Days
+        {/* Flags */}
+        {[
+          "isFeatured",
+          "isHot",
+          "isNewArrival",
+          "isBestSeller",
+          "isRecommended",
+          "isTrending",
+          "notAvailable",
+          "isOutOfStock",
+        ].map((flag) => (
+          <FloatingLabelInput key={flag} id={flag} onChange={handleChange}>
+            {flag} (true/false)
           </FloatingLabelInput>
-        )}
-
-        {/* === Thumbnail Upload === */}
-        <div>
-          <label className="block mb-2 text-sm font-medium text-gray-600">
-            Product Thumbnail
-          </label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleThumbnailChange}
-            className="block w-full text-sm text-gray-700 border rounded-xl cursor-pointer focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:bg-blue-600 file:text-white hover:file:bg-blue-700"
-          />
-          {thumbnail && (
-            <p className="mt-1 text-sm text-gray-500">
-              Selected: {thumbnail.name}
-            </p>
-          )}
-        </div>
-
-        {/* === Multiple Images Upload === */}
-        <div>
-          <label className="block mb-2 text-sm font-medium text-gray-600">
-            Product Images
-          </label>
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleImagesChange}
-            className="block w-full text-sm text-gray-700 border rounded-xl cursor-pointer focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:bg-blue-600 file:text-white hover:file:bg-blue-700"
-          />
-          {images.length > 0 && (
-            <ul className="mt-2 space-y-1 text-sm text-gray-500">
-              {images.map((img, i) => (
-                <li key={i}>{img.name}</li>
-              ))}
-            </ul>
-          )}
-        </div>
+        ))}
 
         <button
           type="submit"
-          className="px-6 py-2 mt-4 text-white bg-blue-600 rounded-xl hover:bg-blue-700"
+          className="col-span-full mt-4 bg-blue-600 text-white px-6 py-2 rounded-xl"
         >
           Create Product
         </button>
