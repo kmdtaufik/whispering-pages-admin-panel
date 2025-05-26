@@ -118,13 +118,21 @@ export default function CreateProduct() {
   };
 
   return (
-    <section className="p-6 max-w-4xl mx-auto">
+    <section className=" container p-6 max-w-4xl mx-auto">
+      <h1 className="text-2xl font-libre-baskerville mb-6  text-nowrap flex justify-center items-center">
+        Create New Product
+      </h1>
       <form
         onSubmit={handleSubmit}
         className="grid grid-cols-1 md:grid-cols-2 gap-4"
       >
-        <FloatingLabelInput id="slug" onChange={handleChange}>
-          Slug
+        {/* Product Name,Description & Price  */}
+        <FloatingLabelInput
+          id="slug"
+          onChange={handleChange}
+          className="col-span-full"
+        >
+          Unique Name
         </FloatingLabelInput>
         <FloatingLabelInput id="productName" onChange={handleChange}>
           Product Name
@@ -155,28 +163,7 @@ export default function CreateProduct() {
         >
           Original Price
         </FloatingLabelInput>
-
-        <div>
-          <label className="block mb-1">Product Thumbnail</label>
-          <input
-            id="productThumbnail"
-            type="file"
-            onChange={handleChange}
-            className="w-full rounded-lg bg-gray-400"
-          />
-        </div>
-
-        <div>
-          <label className="block mb-1">Product Images</label>
-          <input
-            id="productImages"
-            type="file"
-            multiple
-            onChange={handleChange}
-            className="w-full rounded-lg bg-gray-400"
-          />
-        </div>
-
+        {/* Discount */}
         <FloatingLabelInput id="discount" type="number" onChange={handleChange}>
           Discount
         </FloatingLabelInput>
@@ -189,6 +176,7 @@ export default function CreateProduct() {
           <option value="percentage">Percentage</option>
           <option value="flat">Flat</option>
         </select>
+        {/* Offer Ends At */}
         <FloatingLabelInput
           id="offerEndsAt"
           type="datetime-local"
@@ -196,12 +184,14 @@ export default function CreateProduct() {
         >
           Offer Ends At
         </FloatingLabelInput>
+        {/* Category  */}
         <FloatingLabelInput id="category" onChange={handleChange}>
           Category
         </FloatingLabelInput>
         <FloatingLabelInput id="subCategory" onChange={handleChange}>
           Subcategory
         </FloatingLabelInput>
+        {/* Brand & Manufacturer */}
         <FloatingLabelInput id="brand" onChange={handleChange}>
           Brand
         </FloatingLabelInput>
@@ -217,38 +207,13 @@ export default function CreateProduct() {
         <FloatingLabelInput id="barcode" onChange={handleChange}>
           Barcode
         </FloatingLabelInput>
+        {/* Seller & Stock Info */}
         <FloatingLabelInput id="stock" type="number" onChange={handleChange}>
           Stock
-        </FloatingLabelInput>
-        <FloatingLabelInput
-          id="minOrderQuantity"
-          type="number"
-          onChange={handleChange}
-        >
-          Min Order Quantity
-        </FloatingLabelInput>
-        <FloatingLabelInput
-          id="maxOrderQuantity"
-          type="number"
-          onChange={handleChange}
-        >
-          Max Order Quantity
-        </FloatingLabelInput>
-        <FloatingLabelInput id="tags" onChange={handleChange}>
-          Tags (comma separated)
-        </FloatingLabelInput>
-        <FloatingLabelInput id="metaTitle" onChange={handleChange}>
-          Meta Title
-        </FloatingLabelInput>
-        <FloatingLabelInput id="metaDescription" onChange={handleChange}>
-          Meta Description
-        </FloatingLabelInput>
-        <FloatingLabelInput id="metaKeywords" onChange={handleChange}>
-          Meta Keywords (comma separated)
-        </FloatingLabelInput>
+        </FloatingLabelInput>{" "}
         <FloatingLabelInput id="seller" onChange={handleChange}>
           Seller
-        </FloatingLabelInput>
+        </FloatingLabelInput>{" "}
         <FloatingLabelInput id="addedBy" onChange={handleChange}>
           Added By
         </FloatingLabelInput>
@@ -278,12 +243,38 @@ export default function CreateProduct() {
         >
           Warranty Period (Days)
         </FloatingLabelInput>
-
+        <FloatingLabelInput
+          id="minOrderQuantity"
+          type="number"
+          onChange={handleChange}
+        >
+          Min Order Quantity
+        </FloatingLabelInput>
+        <FloatingLabelInput
+          id="maxOrderQuantity"
+          type="number"
+          onChange={handleChange}
+        >
+          Max Order Quantity
+        </FloatingLabelInput>
+        {/* SEO & Meta Info */}
+        <FloatingLabelInput id="tags" onChange={handleChange}>
+          Tags (comma separated)
+        </FloatingLabelInput>
+        <FloatingLabelInput id="metaTitle" onChange={handleChange}>
+          Meta Title
+        </FloatingLabelInput>
+        <FloatingLabelInput id="metaDescription" onChange={handleChange}>
+          Meta Description
+        </FloatingLabelInput>
+        <FloatingLabelInput id="metaKeywords" onChange={handleChange}>
+          Meta Keywords (comma separated)
+        </FloatingLabelInput>
         {/* Shipping Info */}
         {/* <FloatingLabelInput id="weight" type="number" onChange={handleChange}>
           Weight
         </FloatingLabelInput> */}
-        <FloatingLabelInput id="length" type="number" onChange={handleChange}>
+        {/* <FloatingLabelInput id="length" type="number" onChange={handleChange}>
           Length
         </FloatingLabelInput>
         <FloatingLabelInput id="width" type="number" onChange={handleChange}>
@@ -304,8 +295,7 @@ export default function CreateProduct() {
           onChange={handleChange}
         >
           Shipping Cost
-        </FloatingLabelInput>
-
+        </FloatingLabelInput> */}
         {/* Flags */}
         {[
           "isFeatured",
@@ -317,11 +307,17 @@ export default function CreateProduct() {
           "notAvailable",
           "isOutOfStock",
         ].map((flag) => (
-          <FloatingLabelInput key={flag} id={flag} onChange={handleChange}>
-            {flag} (true/false)
-          </FloatingLabelInput>
+          <label key={flag} className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id={flag}
+              checked={!!form[flag]}
+              onChange={handleChange}
+              className="mr-2"
+            />
+            {flag}
+          </label>
         ))}
-
         <button
           type="submit"
           className="col-span-full mt-4 bg-blue-600 text-white px-6 py-2 rounded-xl"
