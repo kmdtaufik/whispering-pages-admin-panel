@@ -3,10 +3,13 @@ import React, { useState, useEffect, useRef } from "react";
 const textLikeTypes = ["text", "email", "password", "number", "tel", "url"];
 
 const FloatingLabelInput = ({
-  children,
   id,
   type = "text",
+  value,
+  onChange,
+  children,
   className = "",
+  required = false,
   ...props
 }) => {
   const [focused, setFocused] = useState(false);
@@ -43,32 +46,29 @@ const FloatingLabelInput = ({
   const isFloating = isTextLike && (focused || hasText);
 
   return (
-    <div className={`relative w-full mt-6 font-lato ${className}`}>
+    <div className={`relative ${className}`}>
       <input
-        id={id}
         type={type}
+        id={id}
+        value={value || ""}
+        onChange={onChange}
+        required={required}
         ref={inputRef}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        className={`w-full px-4 pt-6 pb-2 text-base border rounded-xl focus:outline-none
+        className={`peer w-full px-3 py-3 border border-gray-300 rounded-xl placeholder-transparent focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
           ${focused ? "border-black" : "border-gray-300"}
         `}
+        placeholder={children}
         {...props}
       />
-      {isTextLike && (
-        <label
-          htmlFor={id}
-          className={`absolute px-1 bg-white left-3 transition-all duration-200 pointer-events-none
-            ${
-              isFloating
-                ? "text-sm -top-2.5 text-black"
-                : "top-1/2 -translate-y-1/2 text-gray-500"
-            }
-          `}
-        >
-          {children}
-        </label>
-      )}
+      <label
+        htmlFor={id}
+        className="absolute left-3 -top-2.5 bg-white px-1 text-sm text-gray-600 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-primary"
+      >
+        {children}
+        {required && <span className="text-red-500 ml-1">*</span>}
+      </label>
     </div>
   );
 };
