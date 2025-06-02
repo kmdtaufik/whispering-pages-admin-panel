@@ -35,8 +35,6 @@ export default function CreateProduct() {
     maxOrderQuantity: "100",
     metaTitle: "",
     metaDescription: "",
-    tags: "",
-    metaKeywords: "",
     // Flags
     isFeatured: false,
     isHot: false,
@@ -51,6 +49,18 @@ export default function CreateProduct() {
   const [files, setFiles] = useState({
     thumbnail: null,
     images: [],
+  });
+
+  const [tags, setTags] = useState([]);
+  const [metaKeywords, setMetaKeywords] = useState([]);
+  const [currentTag, setCurrentTag] = useState("");
+  const [currentKeyword, setCurrentKeyword] = useState("");
+
+  // Add image preview states
+  const [imagePreview, setImagePreview] = useState({
+    isOpen: false,
+    imageSrc: null,
+    imageName: null,
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -69,6 +79,74 @@ export default function CreateProduct() {
     } else {
       setForm((prev) => ({ ...prev, [id]: value }));
     }
+  };
+
+  // Add image handling functions
+  const removeThumbnail = () => {
+    setFiles((prev) => ({ ...prev, thumbnail: null }));
+    // Reset the input
+    const thumbnailInput = document.getElementById("thumbnail");
+    if (thumbnailInput) thumbnailInput.value = "";
+  };
+
+  const removeImage = (indexToRemove) => {
+    setFiles((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, index) => index !== indexToRemove),
+    }));
+    // Reset the input to allow re-selecting the same files
+    const imagesInput = document.getElementById("images");
+    if (imagesInput) imagesInput.value = "";
+  };
+
+  const openImagePreview = (file, name) => {
+    const imageUrl = URL.createObjectURL(file);
+    setImagePreview({
+      isOpen: true,
+      imageSrc: imageUrl,
+      imageName: name,
+    });
+  };
+
+  const closeImagePreview = () => {
+    if (imagePreview.imageSrc) {
+      URL.revokeObjectURL(imagePreview.imageSrc);
+    }
+    setImagePreview({
+      isOpen: false,
+      imageSrc: null,
+      imageName: null,
+    });
+  };
+
+  const handleTagKeyPress = (e) => {
+    if (e.key === "Enter" && currentTag.trim()) {
+      e.preventDefault();
+      if (!tags.includes(currentTag.trim())) {
+        setTags([...tags, currentTag.trim()]);
+      }
+      setCurrentTag("");
+    }
+  };
+
+  const removeTag = (tagToRemove) => {
+    setTags(tags.filter((tag) => tag !== tagToRemove));
+  };
+
+  const handleKeywordKeyPress = (e) => {
+    if (e.key === "Enter" && currentKeyword.trim()) {
+      e.preventDefault();
+      if (!metaKeywords.includes(currentKeyword.trim())) {
+        setMetaKeywords([...metaKeywords, currentKeyword.trim()]);
+      }
+      setCurrentKeyword("");
+    }
+  };
+
+  const removeKeyword = (keywordToRemove) => {
+    setMetaKeywords(
+      metaKeywords.filter((keyword) => keyword !== keywordToRemove)
+    );
   };
 
   const validateForm = () => {
@@ -144,29 +222,17 @@ export default function CreateProduct() {
         formData.append("images", file);
       });
 
-      // Convert arrays to JSON strings
-      const tagsArray = form.tags
-        ? form.tags
-            .split(",")
-            .map((t) => t.trim())
-            .filter((t) => t)
-        : [];
-      const metaKeywordsArray = form.metaKeywords
-        ? form.metaKeywords
-            .split(",")
-            .map((k) => k.trim())
-            .filter((k) => k)
-        : [];
-
-      formData.append("tags", JSON.stringify(tagsArray));
-      formData.append("metaKeywords", JSON.stringify(metaKeywordsArray));
+      // Append tags and metaKeywords as JSON arrays
+      formData.append("tags", JSON.stringify(tags));
+      formData.append("metaKeywords", JSON.stringify(metaKeywords));
       formData.append("specification", JSON.stringify([]));
       formData.append("variants", JSON.stringify([]));
       formData.append("customFields", JSON.stringify([]));
       formData.append("shippingInfo", JSON.stringify({}));
 
       const response = await fetch(
-        "https://whispering-pages-backend.vercel.app:5000/api/products",
+        // "http://localhost:5000/api/products", // Change to your backend URL
+        "https://whispering-pages-backend.vercel.app/api/products",
         {
           method: "POST",
           body: formData,
@@ -182,7 +248,7 @@ export default function CreateProduct() {
 
       if (result.success) {
         toast.success("Product created successfully!");
-        // Reset form
+        // Reset form including tags and keywords
         setForm({
           slug: "",
           productName: "",
@@ -212,8 +278,6 @@ export default function CreateProduct() {
           maxOrderQuantity: "100",
           metaTitle: "",
           metaDescription: "",
-          tags: "",
-          metaKeywords: "",
           isFeatured: false,
           isHot: false,
           isNewArrival: false,
@@ -224,6 +288,10 @@ export default function CreateProduct() {
           isOutOfStock: false,
         });
         setFiles({ thumbnail: null, images: [] });
+        setTags([]);
+        setMetaKeywords([]);
+        setCurrentTag("");
+        setCurrentKeyword("");
       }
     } catch (error) {
       console.error("Error creating product:", error);
@@ -440,6 +508,30 @@ export default function CreateProduct() {
                 className="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-primary"
                 required
               />
+              {/* Thumbnail Preview */}
+              {files.thumbnail && (
+                <div className="mt-2">
+                  <div className="inline-flex items-center bg-blue-50 border border-blue-200 px-3 py-2 rounded-lg">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        openImagePreview(files.thumbnail, files.thumbnail.name)
+                      }
+                      className="text-blue-600 hover:text-blue-800 text-sm mr-2 underline"
+                    >
+                      {files.thumbnail.name}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={removeThumbnail}
+                      className="text-red-500 hover:text-red-700 ml-2"
+                      title="Remove thumbnail"
+                    >
+                      ×
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -453,6 +545,33 @@ export default function CreateProduct() {
                 onChange={handleChange}
                 className="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-primary"
               />
+              {/* Images Preview */}
+              {files.images.length > 0 && (
+                <div className="mt-2 space-y-2">
+                  {files.images.map((file, index) => (
+                    <div
+                      key={index}
+                      className="inline-flex items-center bg-green-50 border border-green-200 px-3 py-2 rounded-lg mr-2 mb-2"
+                    >
+                      <button
+                        type="button"
+                        onClick={() => openImagePreview(file, file.name)}
+                        className="text-green-600 hover:text-green-800 text-sm mr-2 underline"
+                      >
+                        {file.name}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => removeImage(index)}
+                        className="text-red-500 hover:text-red-700 ml-2"
+                        title="Remove image"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -564,20 +683,76 @@ export default function CreateProduct() {
             >
               Meta Description
             </FloatingLabelInput>
-            <FloatingLabelInput
-              id="tags"
-              value={form.tags}
-              onChange={handleChange}
-            >
-              Tags (comma separated)
-            </FloatingLabelInput>
-            <FloatingLabelInput
-              id="metaKeywords"
-              value={form.metaKeywords}
-              onChange={handleChange}
-            >
-              Meta Keywords (comma separated)
-            </FloatingLabelInput>
+
+            {/* Tags Input */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Tags
+              </label>
+              <input
+                type="text"
+                value={currentTag}
+                onChange={(e) => setCurrentTag(e.target.value)}
+                onKeyPress={handleTagKeyPress}
+                placeholder="Enter a tag and press Enter"
+                className="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-primary"
+              />
+              {/* Tags Preview */}
+              {tags.length > 0 && (
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="inline-flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
+                    >
+                      {tag}
+                      <button
+                        type="button"
+                        onClick={() => removeTag(tag)}
+                        className="ml-2 text-primary hover:text-primary/70"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Meta Keywords Input */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Meta Keywords
+              </label>
+              <input
+                type="text"
+                value={currentKeyword}
+                onChange={(e) => setCurrentKeyword(e.target.value)}
+                onKeyPress={handleKeywordKeyPress}
+                placeholder="Enter a keyword and press Enter"
+                className="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-primary"
+              />
+              {/* Keywords Preview */}
+              {metaKeywords.length > 0 && (
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {metaKeywords.map((keyword, index) => (
+                    <span
+                      key={index}
+                      className="inline-flex items-center bg-secondary/10 text-secondary px-3 py-1 rounded-full text-sm"
+                    >
+                      {keyword}
+                      <button
+                        type="button"
+                        onClick={() => removeKeyword(keyword)}
+                        className="ml-2 text-secondary hover:text-secondary/70"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -636,6 +811,45 @@ export default function CreateProduct() {
         draggable
         pauseOnHover
       />
+
+      {/* Image Preview Dialog */}
+      {imagePreview.isOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-4xl max-h-[90vh] w-full overflow-hidden">
+            {/* Dialog Header */}
+            <div className="flex justify-between items-center p-4 border-b">
+              <h3 className="text-lg font-semibold text-gray-900">
+                {imagePreview.imageName}
+              </h3>
+              <button
+                onClick={closeImagePreview}
+                className="text-gray-400 hover:text-gray-600 text-2xl"
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Dialog Content */}
+            <div className="p-4 flex justify-center">
+              <img
+                src={imagePreview.imageSrc}
+                alt={imagePreview.imageName}
+                className="max-w-full max-h-[70vh] object-contain"
+              />
+            </div>
+
+            {/* Dialog Footer */}
+            <div className="flex justify-end p-4 border-t">
+              <button
+                onClick={closeImagePreview}
+                className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
