@@ -231,7 +231,6 @@ export default function CreateProduct() {
       formData.append("shippingInfo", JSON.stringify({}));
 
       const response = await fetch(
-        // "http://localhost:5000/api/products", // Change to your backend URL
         "https://whispering-pages-backend.vercel.app/api/products",
         {
           method: "POST",
@@ -241,10 +240,12 @@ export default function CreateProduct() {
 
       if (!response.ok) {
         const errorData = await response.json();
+        console.error("Server error response:", errorData);
         throw new Error(errorData.message || "Failed to create product");
       }
 
       const result = await response.json();
+      console.log("Success response:", result);
 
       if (result.success) {
         toast.success("Product created successfully!");
