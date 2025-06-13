@@ -232,7 +232,6 @@ export default function CreateProduct() {
 
       const response = await fetch(
         "https://whispering-pages-backend.vercel.app/api/products",
-        // "http://localhost:5000/api/products",
         {
           method: "POST",
           body: formData,
