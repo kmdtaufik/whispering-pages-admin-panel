@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -17,10 +18,10 @@ export default function Products() {
   const [sortBy, setSortBy] = useState("-createdAt");
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
 
   const API_BASE_URL =
     "https://whispering-pages-backend.vercel.app/api/products";
+  const navigate = useNavigate();
 
   // Fetch products from API
   const fetchProducts = async (
@@ -457,10 +458,7 @@ export default function Products() {
                   {/* Enhanced Action Buttons */}
                   <div className="flex space-x-2">
                     <button
-                      onClick={() => {
-                        setSelectedProduct(product);
-                        setShowEditModal(true);
-                      }}
+                      onClick={() => navigate(`/products/edit/${product._id}`)}
                       className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white text-sm py-2.5 px-3 rounded-lg font-medium transition-all duration-300 flex items-center justify-center gap-1"
                     >
                       <svg
@@ -655,47 +653,6 @@ export default function Products() {
                     Delete
                   </button>
                 </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Enhanced Edit Modal */}
-        {showEditModal && selectedProduct && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300">
-              <div className="p-6">
-                <div className="flex items-center justify-center w-16 h-16 mx-auto bg-blue-100 rounded-full mb-4">
-                  <svg
-                    className="w-8 h-8 text-blue-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                    />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-semibold text-center mb-2">
-                  Edit Product
-                </h3>
-                <p className="text-gray-600 text-center mb-6">
-                  Edit functionality will be implemented in the next update. For
-                  now, you can delete and recreate the product.
-                </p>
-                <button
-                  onClick={() => {
-                    setShowEditModal(false);
-                    setSelectedProduct(null);
-                  }}
-                  className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-white py-3 px-4 rounded-lg font-medium transition-all duration-200"
-                >
-                  Close
-                </button>
               </div>
             </div>
           </div>

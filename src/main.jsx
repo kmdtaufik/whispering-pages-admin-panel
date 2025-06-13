@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router";
 import Home from "./pages/Home/Home";
 import CreateProduct from "./pages/CreateProduct/CreateProduct";
 import Products from "./pages/Products/Products";
+import EditProduct from "./pages/EditProduct/EditProduct";
 
 // Create the root element and render the application
 createRoot(document.getElementById("root")).render(
@@ -14,6 +15,7 @@ createRoot(document.getElementById("root")).render(
         <Route path="/" element={<Home />} />
         <Route path="/create-product" element={<CreateProduct />} />
         <Route path="/products" element={<Products />} />
+        <Route path="/products/edit/:id" element={<EditProduct />} />
         <Route
           path="/analytics"
           element={
