@@ -4,6 +4,7 @@ import "./index.css";
 import { BrowserRouter, Routes, Route } from "react-router";
 import Home from "./pages/Home/Home";
 import CreateProduct from "./pages/CreateProduct/CreateProduct";
+import Products from "./pages/Products/Products";
 
 // Create the root element and render the application
 createRoot(document.getElementById("root")).render(
@@ -12,12 +13,7 @@ createRoot(document.getElementById("root")).render(
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/create-product" element={<CreateProduct />} />
-        <Route
-          path="/products"
-          element={
-            <div className="p-8 text-center">Products page coming soon...</div>
-          }
-        />
+        <Route path="/products" element={<Products />} />
         <Route
           path="/analytics"
           element={
