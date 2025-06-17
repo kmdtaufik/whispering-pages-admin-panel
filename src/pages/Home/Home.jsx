@@ -3,17 +3,19 @@ import { Link } from "react-router";
 
 export default function Home() {
   return (
-    <section className="container mx-auto min-h-screen bg-gradient-to-br from-tertiary to-white">
+    <section className="container mx-auto p-6">
       {/* Header */}
-      <div className="flex justify-center items-center pt-12 pb-8">
+      <div className="mb-8">
         <h1 className="font-libre-baskerville text-4xl text-secondary text-center">
-          Whispering Pages
-          <span className="block text-xl text-gray-600 mt-2">Admin Panel</span>
+          Dashboard
+          <span className="block text-xl text-gray-600 mt-2">
+            Welcome to your admin panel
+          </span>
         </h1>
       </div>
 
       {/* Quick Actions Grid */}
-      <div className="max-w-4xl mx-auto px-6">
+      <div className="max-w-4xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Create Product Card */}
           <Link to="/create-product" className="group">

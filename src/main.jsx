@@ -6,27 +6,62 @@ import Home from "./pages/Home/Home";
 import CreateProduct from "./pages/CreateProduct/CreateProduct";
 import Products from "./pages/Products/Products";
 import EditProduct from "./pages/EditProduct/EditProduct";
+import Layout from "./components/Layout/Layout";
 
 // Create the root element and render the application
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/create-product" element={<CreateProduct />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/products/edit/:id" element={<EditProduct />} />
-        <Route
-          path="/analytics"
-          element={
-            <div className="p-8 text-center">Analytics page coming soon...</div>
-          }
-        />
-        <Route
-          path="*"
-          element={<div className="p-8 text-center">Page not found</div>}
-        />
-      </Routes>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/create-product" element={<CreateProduct />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/products/edit/:id" element={<EditProduct />} />
+          <Route
+            path="/categories"
+            element={
+              <div className="p-8 text-center">
+                Categories page coming soon...
+              </div>
+            }
+          />
+          <Route
+            path="/orders"
+            element={
+              <div className="p-8 text-center">Orders page coming soon...</div>
+            }
+          />
+          <Route
+            path="/customers"
+            element={
+              <div className="p-8 text-center">
+                Customers page coming soon...
+              </div>
+            }
+          />
+          <Route
+            path="/analytics"
+            element={
+              <div className="p-8 text-center">
+                Analytics page coming soon...
+              </div>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <div className="p-8 text-center">
+                Settings page coming soon...
+              </div>
+            }
+          />
+          <Route
+            path="*"
+            element={<div className="p-8 text-center">Page not found</div>}
+          />
+        </Routes>
+      </Layout>
     </BrowserRouter>
   </StrictMode>
 );
