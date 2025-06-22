@@ -33,7 +33,7 @@ export default function Layout({ children }) {
               </svg>
             </button>
             <h1 className="text-lg font-libre-baskerville font-semibold text-secondary">
-              Whispering Pages Admin
+              Admin Dashboard
             </h1>
             <div className="w-6 h-6" /> {/* Spacer for centering */}
           </div>

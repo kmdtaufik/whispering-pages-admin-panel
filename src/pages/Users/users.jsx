@@ -1,15 +1,15 @@
 import React from "react";
 import { Link } from "react-router";
 
-export default function Home() {
+export default function Users() {
   return (
     <section className="container mx-auto p-6">
       {/* Header */}
       <div className="mb-8">
         <h1 className="font-libre-baskerville text-4xl text-secondary text-center">
-          Dashboard
+          User Management
           <span className="block text-xl text-gray-600 mt-2">
-            Welcome to your admin panel
+            Manage your application users
           </span>
         </h1>
       </div>
@@ -17,8 +17,8 @@ export default function Home() {
       {/* Quick Actions Grid */}
       <div className="max-w-4xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Create Product Card */}
-          <Link to="/create-product" className="group">
+          {/* Create User Card */}
+          <Link to="/create-user" className="group">
             <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-primary/20">
               <div className="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-lg mb-4 group-hover:bg-primary/20 transition-colors">
                 <svg
@@ -31,21 +31,21 @@ export default function Home() {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                    d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
                   />
                 </svg>
               </div>
               <h3 className="text-lg font-semibold text-secondary mb-2">
-                Create Product
+                Create User
               </h3>
               <p className="text-gray-600 text-sm">
-                Add new products to your inventory
+                Add new users to the system
               </p>
             </div>
           </Link>
 
-          {/* View Products Card */}
-          <Link to="/products" className="group">
+          {/* View Users Card */}
+          <Link to="/users/list" className="group">
             <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-primary/20">
               <div className="flex items-center justify-center w-12 h-12 bg-secondary/10 rounded-lg mb-4 group-hover:bg-secondary/20 transition-colors">
                 <svg
@@ -58,21 +58,21 @@ export default function Home() {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"
                   />
                 </svg>
               </div>
               <h3 className="text-lg font-semibold text-secondary mb-2">
-                View Products
+                View Users
               </h3>
               <p className="text-gray-600 text-sm text-nowrap">
-                Browse and manage existing products
+                Browse and manage existing users
               </p>
             </div>
           </Link>
 
-          {/* Analytics Card */}
-          <Link to="/analytics" className="group">
+          {/* User Analytics Card */}
+          <Link to="/users/analytics" className="group">
             <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-primary/20">
               <div className="flex items-center justify-center w-12 h-12 bg-green-100 rounded-lg mb-4 group-hover:bg-green-200 transition-colors">
                 <svg
@@ -85,15 +85,15 @@ export default function Home() {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                   />
                 </svg>
               </div>
               <h3 className="text-lg font-semibold text-secondary mb-2">
-                Analytics
+                User Analytics
               </h3>
               <p className="text-gray-600 text-sm">
-                View sales and product analytics
+                View user statistics and activity
               </p>
             </div>
           </Link>
@@ -102,24 +102,24 @@ export default function Home() {
         {/* Quick Stats */}
         <div className="mt-12 bg-white rounded-xl p-6 shadow-lg border border-gray-100">
           <h2 className="text-xl font-semibold text-secondary mb-6">
-            Quick Overview
+            User Overview
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="text-center p-4 bg-gray-50 rounded-lg">
               <div className="text-2xl font-bold text-primary">0</div>
-              <div className="text-sm text-gray-600">Total Products</div>
+              <div className="text-sm text-gray-600">Total Users</div>
             </div>
             <div className="text-center p-4 bg-gray-50 rounded-lg">
               <div className="text-2xl font-bold text-secondary">0</div>
-              <div className="text-sm text-gray-600">Categories</div>
+              <div className="text-sm text-gray-600">Active Users</div>
             </div>
             <div className="text-center p-4 bg-gray-50 rounded-lg">
               <div className="text-2xl font-bold text-green-600">0</div>
-              <div className="text-sm text-gray-600">In Stock</div>
+              <div className="text-sm text-gray-600">New This Month</div>
             </div>
             <div className="text-center p-4 bg-gray-50 rounded-lg">
               <div className="text-2xl font-bold text-red-600">0</div>
-              <div className="text-sm text-gray-600">Out of Stock</div>
+              <div className="text-sm text-gray-600">Inactive Users</div>
             </div>
           </div>
         </div>

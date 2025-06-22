@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { React, StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { BrowserRouter, Routes, Route } from "react-router";
@@ -7,6 +7,10 @@ import CreateProduct from "./pages/CreateProduct/CreateProduct";
 import Products from "./pages/Products/Products";
 import EditProduct from "./pages/EditProduct/EditProduct";
 import Layout from "./components/Layout/Layout";
+import Users from "./pages/Users/users";
+import CreateUser from "./pages/CreateUser/CreateUser";
+import ViewUser from "./pages/ViewUser/ViewUser";
+import EditUser from "./pages/EditUser/EditUser";
 
 // Create the root element and render the application
 createRoot(document.getElementById("root")).render(
@@ -18,6 +22,10 @@ createRoot(document.getElementById("root")).render(
           <Route path="/create-product" element={<CreateProduct />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/edit/:id" element={<EditProduct />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/users/list" element={<ViewUser />} />
+          <Route path="/users/edit/:id" element={<EditUser />} />
+          <Route path="/create-user" element={<CreateUser />} />
           <Route
             path="/categories"
             element={

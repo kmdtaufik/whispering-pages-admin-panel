@@ -64,6 +64,25 @@ export default function Sidebar({ isOpen, setIsOpen }) {
       ),
     },
     {
+      name: "Users",
+      href: "/users",
+      icon: (
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
+          />
+        </svg>
+      ),
+    },
+    {
       name: "Categories",
       href: "/categories",
       icon: (
@@ -189,27 +208,30 @@ export default function Sidebar({ isOpen, setIsOpen }) {
         } ${isCollapsed ? "w-16" : "w-64"}`}
       >
         <div className="flex flex-col h-full">
-          {/* Logo/Brand */}
+          {/* User Profile */}
           <div
             className={`flex items-center justify-between h-16 px-4 border-b border-gray-200 ${
               isCollapsed ? "px-3" : "px-6"
             }`}
           >
             {!isCollapsed ? (
-              <Link to="/" className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">WP</span>
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">A</span>
                 </div>
-                <span className="font-libre-baskerville text-xl font-semibold text-secondary">
-                  Whispering Pages
-                </span>
-              </Link>
+                <div className="flex flex-col">
+                  <span className="font-semibold text-gray-800 text-sm">
+                    Admin User
+                  </span>
+                  <span className="text-xs text-gray-500">Administrator</span>
+                </div>
+              </div>
             ) : (
-              <Link to="/" className="flex items-center justify-center w-full">
-                <div className="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">WP</span>
+              <div className="flex items-center justify-center w-full">
+                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">A</span>
                 </div>
-              </Link>
+              </div>
             )}
 
             {/* Close button for mobile */}
