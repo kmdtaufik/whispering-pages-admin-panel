@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import FloatingLabelInput from "../../components/Input/FloatingLabelInput";
+import { Navigate } from "react-router";
 
 export default function CreateUser() {
   const [form, setForm] = useState({
@@ -84,8 +85,8 @@ export default function CreateUser() {
     }
 
     // Password validation
-    if (form.password.length < 6) {
-      toast.error("Password must be at least 6 characters long");
+    if (form.password.length < 8) {
+      toast.error("Password must be at least 8 characters long");
       return false;
     }
 
@@ -149,6 +150,7 @@ export default function CreateUser() {
       );
     } finally {
       setIsSubmitting(false);
+      // Navigate("/dashboard");
     }
   };
 
@@ -204,7 +206,8 @@ export default function CreateUser() {
               >
                 <option value="user">User</option>
                 <option value="admin">Admin</option>
-                <option value="moderator">Moderator</option>
+                <option value="viewer">Viewer</option>
+                <option value="editor">Editor</option>
               </select>
             </div>
           </div>
