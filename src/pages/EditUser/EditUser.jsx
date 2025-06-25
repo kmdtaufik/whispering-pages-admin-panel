@@ -288,7 +288,7 @@ export default function EditUser() {
               >
                 <option value="user">User</option>
                 <option value="admin">Admin</option>
-                <option value="moderator">Moderator</option>
+                <option value="viewer">Viewer</option>
                 <option value="editor">Editor</option>
               </select>
             </div>
