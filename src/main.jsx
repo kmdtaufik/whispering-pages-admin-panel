@@ -53,7 +53,7 @@ createRoot(document.getElementById("root")).render(
       <Routes>
         {/* Public routes - NO Layout */}
         <Route
-          path="/login"
+          path="/auth/login"
           element={
             <PublicRoute>
               <Login />
@@ -61,7 +61,7 @@ createRoot(document.getElementById("root")).render(
           }
         />
         <Route
-          path="/register"
+          path="/auth/register"
           element={
             <PublicRoute>
               <Register />

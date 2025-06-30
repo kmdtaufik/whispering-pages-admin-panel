@@ -57,6 +57,7 @@ export default function Login() {
       );
 
       const data = await response.json();
+      console.log("Login response:", data);
 
       if (response.ok && data._id) {
         toast.success("Login successful! Redirecting to dashboard...");
@@ -66,7 +67,7 @@ export default function Login() {
         setTimeout(() => {
           navigate("/");
           // Refresh only after successful navigation to home
-          window.location.reload();
+          // window.location.reload();
         }, 1500);
       } else {
         toast.error(data.message || "Login failed");
