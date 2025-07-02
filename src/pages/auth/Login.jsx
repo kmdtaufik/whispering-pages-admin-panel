@@ -67,7 +67,7 @@ export default function Login() {
         setTimeout(() => {
           navigate("/");
           // Refresh only after successful navigation to home
-          // window.location.reload();
+          window.location.reload();
         }, 1500);
       } else {
         toast.error(data.message || "Login failed");

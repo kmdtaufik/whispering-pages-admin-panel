@@ -448,7 +448,7 @@ export default function Products() {
                 {/* Enhanced Action Buttons */}
                 <div className="flex space-x-2">
                   <button
-                    onClick={() => navigate(`/products/edit/${product._id}`)}
+                    onClick={() => navigate(`/products/edit/${product.slug}`)}
                     className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white text-sm py-2.5 px-3 rounded-lg font-medium transition-all duration-300 flex items-center justify-center gap-1"
                   >
                     <svg

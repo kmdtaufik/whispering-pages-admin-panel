@@ -6,7 +6,6 @@ import FloatingLabelInput from "../../components/Input/FloatingLabelInput";
 export default function CreateProduct() {
   const [form, setForm] = useState({
     // Required fields
-    slug: "",
     productName: "",
     productDescription: "",
     productPrice: "",
@@ -151,7 +150,6 @@ export default function CreateProduct() {
 
   const validateForm = () => {
     const requiredFields = [
-      "slug",
       "productName",
       "productDescription",
       "productPrice",
@@ -251,7 +249,6 @@ export default function CreateProduct() {
         toast.success("Product created successfully!");
         // Reset form including tags and keywords
         setForm({
-          slug: "",
           productName: "",
           productDescription: "",
           productPrice: "",
@@ -317,15 +314,6 @@ export default function CreateProduct() {
             Basic Information
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FloatingLabelInput
-              id="slug"
-              value={form.slug}
-              onChange={handleChange}
-              className="col-span-full"
-              required
-            >
-              Unique Slug
-            </FloatingLabelInput>
             <FloatingLabelInput
               id="productName"
               value={form.productName}
